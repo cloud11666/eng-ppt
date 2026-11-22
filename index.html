@@ -340,6 +340,7 @@
 </style>
 <style id="presentation-controls-hidden">
 .nav, .editToggle { display: none !important; }
+@media screen { body { background: var(--paper); } .stage { box-shadow: none; } }
 </style>
 </head><body>
 <main class="stage" id="stage">
@@ -457,7 +458,7 @@
 <aside class="editor"><h2>Visual editor</h2><p>Double-click text to edit. Select an element, drag the MOVE handle, or resize from the corner.</p><h3>Slides</h3><div class="edit-pages" id="pageButtons"></div><h3>Selected element</h3><div id="selectedName">None</div><button id="textEdit">Edit text</button><button id="changeImg">Replace image</button><label>Font size (px): <input id="size" max="150" min="10" type="number"/></label><label>Text color: <input id="color" type="color"/></label><button id="reset">Reset position</button><h3>Save</h3><button id="save">Download edited HTML</button><button id="print">Print / PDF</button><button id="present">▶ Present</button><p>Saved HTML is self-contained and can be edited again.</p></aside><input accept="image/*" hidden="" id="file" type="file"/>
 <script>
 const slides=[...document.querySelectorAll('.slide')],stage=document.querySelector('#stage'),$=id=>document.getElementById(id);let current=0,editing=false,selected=null,gesture=null;const selection=$('selection');stage.appendChild(selection);
-function resize(){const available=innerWidth-(editing?315:28);document.documentElement.style.setProperty('--scale',Math.min(available/1600,(innerHeight-75)/900,1.6))}
+function resize(){const available=innerWidth-(editing?315:0);document.documentElement.style.setProperty('--scale',Math.min(available/1600,innerHeight/900))}
 function show(i){current=Math.max(0,Math.min(slides.length-1,i));slides.forEach((s,j)=>s.classList.toggle('active',j===current));$('counter').textContent=String(current+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');select(null);buttons()}
 function buttons(){let box=$('pageButtons');box.innerHTML='';slides.forEach((s,i)=>{let b=document.createElement('button');b.textContent=i+1;if(i===current)b.className='current';b.onclick=()=>show(i);box.append(b)})}
 function select(el){selected=el;selection.style.display=el?'block':'none';if(!el)return;const st=getComputedStyle(el);$('size').value=Math.round(parseFloat(st.fontSize));$('selectedName').textContent=(el.textContent||el.tagName).trim().slice(0,55);locate()}
